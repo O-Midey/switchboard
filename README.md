@@ -30,7 +30,7 @@ Stop everything with:
 make compose-down
 ```
 
-The project is still early, but the technical notes, local development commands, and operational endpoints are documented below for anyone who wants to explore the internals.
+The project is still early. The [production roadmap](ROADMAP.md) tracks what is complete, what comes next, and the evidence required before Switchboard can be called production-ready.
 
 ## Local development
 
@@ -73,7 +73,7 @@ docs                  architecture, operations, and decisions
 - This milestone has no retry layer. Automatic proxy retries can duplicate unsafe requests and require a request replay/idempotency design first.
 - TLS, external authentication, rate limiting, dynamic discovery, and multi-instance policy distribution belong at later deployment milestones.
 
-Read [the architecture](docs/architecture.md), [operations guide](docs/operations.md), and [ADRs](docs/adr/) before extending the routing path.
+Read the [production roadmap](ROADMAP.md), [architecture](docs/architecture.md), [operations guide](docs/operations.md), and [ADRs](docs/adr/) before extending the routing path.
 
 ## Contributing and security
 
