@@ -1,0 +1,9 @@
+.git
+.github
+web
+coverage
+bin
+*.coverprofile
+.env*
+README.md
+docs

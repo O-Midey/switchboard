@@ -1,0 +1,45 @@
+name: switchboard
+services:
+  switchboard:
+    build:
+      context: .
+      target: switchboard
+    command: ["-config", "/etc/switchboard/config.json"]
+    volumes:
+      - ./configs/switchboard.json:/etc/switchboard/config.json:ro
+    ports:
+      - "8080:8080"
+      - "127.0.0.1:9090:9090"
+    depends_on:
+      - backend-a
+      - backend-b
+      - backend-c
+    restart: unless-stopped
+    security_opt: ["no-new-privileges:true"]
+
+  backend-a:
+    build: { context: ., target: mock-backend }
+    command: ["-id", "atlas", "-port", "8081", "-latency", "20ms", "-error-rate", "0.01"]
+    restart: unless-stopped
+    security_opt: ["no-new-privileges:true"]
+
+  backend-b:
+    build: { context: ., target: mock-backend }
+    command: ["-id", "boreal", "-port", "8082", "-latency", "75ms", "-error-rate", "0.03"]
+    restart: unless-stopped
+    security_opt: ["no-new-privileges:true"]
+
+  backend-c:
+    build: { context: ., target: mock-backend }
+    command: ["-id", "cirrus", "-port", "8083", "-latency", "180ms", "-error-rate", "0"]
+    restart: unless-stopped
+    security_opt: ["no-new-privileges:true"]
+
+  dashboard:
+    build: { context: ./web }
+    environment:
+      SWITCHBOARD_ADMIN_URL: http://switchboard:9090
+    ports: ["3000:3000"]
+    depends_on: [switchboard]
+    restart: unless-stopped
+    security_opt: ["no-new-privileges:true"]

@@ -1,0 +1,12 @@
+{
+  "proxyAddress": ":8080",
+  "adminAddress": ":9090",
+  "routingStrategy": "round-robin",
+  "shutdownTimeout": "10s",
+  "metricsWindow": "60s",
+  "backends": [
+    { "id": "atlas", "url": "http://localhost:8081", "healthPath": "/health", "healthInterval": "2s", "healthTimeout": "750ms", "unhealthyAfter": 2, "healthyAfter": 1 },
+    { "id": "boreal", "url": "http://localhost:8082", "healthPath": "/health", "healthInterval": "2s", "healthTimeout": "750ms", "unhealthyAfter": 2, "healthyAfter": 1 },
+    { "id": "cirrus", "url": "http://localhost:8083", "healthPath": "/health", "healthInterval": "2s", "healthTimeout": "750ms", "unhealthyAfter": 2, "healthyAfter": 1 }
+  ]
+}
