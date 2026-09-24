@@ -1,28 +1,34 @@
 # Switchboard
 
-Switchboard is an adaptive reverse proxy with a deterministic data plane and an intentionally separate policy control plane. Milestone one establishes the trustworthy baseline: concurrent proxying, active health checks, rolling backend telemetry, round-robin and least-connections routing, operational endpoints, graceful shutdown, and a control-room dashboard.
+Switchboard is an experiment in making infrastructure more responsive.
 
-Jev is **not** connected to request routing yet. The future model may propose bounded, expiring weights or policies; ordinary Go code validates and executes them. If the model or control plane fails, the proxy keeps serving with its last valid policy or a deterministic baseline.
+I’m building it with **Jev**, Go, Docker, and a small live dashboard. The idea is simple: when several services can handle a request, Switchboard watches what is happening and helps choose the best place to send it.
 
-## Quick start
+This is the first step toward software that can make fast, contextual decisions instead of following the same static rule every time.
 
-Requirements: Docker with Compose. Then:
+## Where it is now
+
+The foundation is working: Switchboard can send traffic to three local services, notice when one is unhealthy, track what is happening, and show the system in the dashboard.
+
+Jev is intentionally waiting behind that foundation. The next phase will let Jev suggest routing decisions, while the core system keeps the final say and continues working if the model is unavailable.
+
+## Try it locally
+
+Requirements: Docker with Compose. This starts the proxy, three sample services, and the dashboard:
 
 ```bash
 make compose-up
-curl http://localhost:8080/hello
-open http://localhost:3000
-make smoke
 ```
 
-The proxy listens on `:8080`. The admin interface is bound to `127.0.0.1:9090` by Compose and exposes:
+Then open [http://localhost:3000](http://localhost:3000) and send a request through [http://localhost:8080](http://localhost:8080).
 
-- `GET /-/healthz` — process liveness
-- `GET /-/readyz` — at least one healthy upstream
-- `GET /api/v1/state` — dashboard state contract
-- `GET /metrics` — Prometheus text exposition
+Stop everything with:
 
-Stop the stack with `make compose-down`.
+```bash
+make compose-down
+```
+
+The project is still early, but the technical notes, local development commands, and operational endpoints are documented below for anyone who wants to explore the internals.
 
 ## Local development
 
@@ -70,4 +76,3 @@ Read [the architecture](docs/architecture.md), [operations guide](docs/operation
 ## Contributing and security
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for quality gates and [SECURITY.md](SECURITY.md) for private vulnerability reporting guidance. The project is currently pre-release; interfaces may change before `v1.0.0`.
-
