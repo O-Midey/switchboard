@@ -12,6 +12,8 @@ The foundation is working: Switchboard can send traffic to three local services,
 
 Jev is intentionally waiting behind that foundation. The next phase will let Jev suggest routing decisions, while the core system keeps the final say and continues working if the model is unavailable.
 
+The control-plane groundwork is now in place too: candidate policies must name the configured backends, use normalized weights, carry a version, and expire. A deterministic weighted router can evaluate those policies in shadow mode while live traffic continues using the proven baseline.
+
 ## Try it locally
 
 Requirements: Docker with Compose. This starts the proxy, three sample services, and the dashboard:

@@ -21,7 +21,7 @@ client -> proxy handler -> deterministic Router -> healthy upstream
                          +-> admin state / Prometheus -> dashboard
 ```
 
-The `Router` interface is the data-plane seam. It receives a request description and the configured targets, filters on authoritative health, then returns one target. The policy `Provider` is the future control-plane seam. It can only propose versioned, expiring weights; a validator and deterministic weighted router will mediate any future use.
+The `Router` interface is the data-plane seam. It receives a request description and the configured targets, filters on authoritative health, then returns one target. The policy `Provider` is the control-plane seam. Its untrusted proposals now pass through a validator that checks backend membership, exact weight normalization, versioning, and expiry. A deterministic weighted adapter can evaluate validated policies in shadow mode; it is not connected to live request routing yet.
 
 ## Correctness invariants
 
@@ -56,4 +56,3 @@ Containers run as non-root with `no-new-privileges`. Secrets are not required in
 - Add service discovery only when backend membership changes faster than safe configuration rollout.
 - Add a queue only if policy evaluation must be buffered/replayed; it is not part of request handling.
 - Split control and data plane deployments only when independent scaling, permissions, or failure isolation justify the operational cost.
-
